@@ -49,23 +49,80 @@ const getFlightByFlightNumber = (req, res) => {
 };
 
 const getFirstClassAvailableFlights = (req, res) => {
-    const newArray = flightsData.filter(item => item.IsThereFirstClass == req.params.IsThereFirstClass);
-    newArray ?  res.send({message:'success',newArray}) : res.send({message:'no items found'})
+  const newArray = flightsData.filter(
+    (item) => item.IsThereFirstClass == req.params.IsThereFirstClass
+  );
+  newArray
+    ? res.send({ message: "success", newArray })
+    : res.send({ message: "no items found" });
 };
 
 const getFlightByDepartureTime = (req, res) => {
-    const newArray = flightsData.filter(item => item.departureTime == req.params.departureTime);
-    newArray ? res.send({message:'success',newArray}) : res.send({message:'no items found'})
+  const newArray = flightsData.filter(
+    (item) => item.departureTime == req.params.departureTime
+  );
+  newArray
+    ? res.send({ message: "success", newArray })
+    : res.send({ message: "no items found" });
 };
 
-const  addFieldToData = async(req,res) => {
-    try{
-        return flightsData.map(obj=>
-            obj = {availableSeats:Math.floor(Math.random()*60),...obj})
-            // obj.availableSeats = Math.floor(Math.random()*60) )
-            .then(flightsData=>res.send({message:'success',flightsData}))
-        }catch(error){res.send({message:'there has been an error'})}
+const addFieldToData = async (req, res) => {
+  try {
+    return flightsData
+      .map(
+        (obj) =>
+          (obj.availableSeats = `${Math.floor(
+            Math.random() * obj.NumberOfSeats
+          )}`)
+        // (obj = {...obj,availableSeats: Math.floor(Math.random() * obj.NumberOfSeats)})
+      )
+      .then(res.send({ message: "success", flightsData }));
+  } catch (error) {
+    res.send({ message: "there has been an error" });
+  }
+};
+
+const getMatchingFlightsByTakeOffAndLandingTerminal = async (req, res) => {
+  try {
+    const newArray = flightsData.filter(
+      (item) =>
+        item.landing == req.body.input.landing &&
+        item.takeOff == req.body.input.takeOff
+    );
+    newArray
+      ? res.send({ message: "success", newArray })
+      : res.send({ message: "no items found" });
+  } catch (error) {
+    res.send({ message: "there has been an error" });
+  }
+};
+
+// id: 9,
+// flightNumber: 2258,
+// takeOff: "Terminal 2",
+// landing: "Terminal 3",
+// NumberOfSeats: 15,
+// departureTime:"09:30",
+// landingTime: "12:00",
+// IsThereFirstClass: 'false',
+const getMatchingFlightsByDepartureTimeAndTakeOffAndLandingTimeAndAvailableSeats =
+  async (req, res) => {
+    try {
+      const newArray = flightsData.filter(
+        (item) =>
+          item.departureTime == req.body.input.departureTime &&
+          item.takeOff == req.body.input.takeOff &&
+          item.availableSeats > 0
+      );
+      return newArray
+        ? res.send({ message: "success", newArray })
+        : res.send({ message: "no items found" });
+    } catch (error) {
+      res.send({ message: `there has been an error: ${error}` });
+    } finally {
+      addFieldToData(req, res);
     }
+  };
 
 module.exports = {
   getAllData,
@@ -76,7 +133,9 @@ module.exports = {
   getFlightByFlightNumber,
   getFirstClassAvailableFlights,
   getFlightByDepartureTime,
-  addFieldToData
+  addFieldToData,
+  getMatchingFlightsByTakeOffAndLandingTerminal,
+  getMatchingFlightsByDepartureTimeAndTakeOffAndLandingTimeAndAvailableSeats
 };
 
 const getItemIndexByFlightNum = (req, arr) => {
