@@ -25,4 +25,4 @@ flightsRoute.post("/matchingFlights/ByDepartureTime&TakeOff&LandingTimeAndAvaila
 flightsRoute.put("/update/byId/:id", updateFlight);
 flightsRoute.delete("/delete/byId/:id", deleteAFlight);
 
-module.exports = { flightsRoute };
+module.exports =  flightsRoute ;
