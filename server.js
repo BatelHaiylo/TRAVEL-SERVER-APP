@@ -38,7 +38,7 @@ const flightsRouteMiddleWareByMethod = (req,res,next) => {
     }
     next()
 }
-
+middleware
 const protectiveMiddleware = (req,res,next) => {
         const exsertingUser = usersData.find((user) => user.email == req.body.user.email);
         return exsertingUser? checkMatchingPasswords(req,exsertingUser,next) : res.send('user email not found')
