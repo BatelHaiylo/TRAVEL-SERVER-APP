@@ -1,7 +1,11 @@
 const usersRoute = require('express').Router();
-const {getAllData,getLoginData} = require('../controllers/users-crl')
+const {getAllData,addUser, checkUserData, getUserRegistrationData, checkUserAge, getUserFullData} = require('../controllers/users-crl')
 
 usersRoute.get('/',getAllData);
-usersRoute.get('/getByEmail/:email', getLoginData);
+usersRoute.post('/login',addUser);
+usersRoute.post('/login/byAge',checkUserAge);
+usersRoute.post('/login/email',checkUserData);
+usersRoute.post('/userRegister',getUserRegistrationData);
+usersRoute.put('/updateUserData',getUserFullData);
 
 module.exports= usersRoute

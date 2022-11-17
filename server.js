@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+dotenv.config()
 const express = require('express')
 const {statesRouter} = require('./routes/State-route')
 const {airlinesRoute} = require('./routes/Airlines-route')
@@ -38,7 +40,7 @@ const flightsRouteMiddleWareByMethod = (req,res,next) => {
     }
     next()
 }
-middleware
+
 const protectiveMiddleware = (req,res,next) => {
         const exsertingUser = usersData.find((user) => user.email == req.body.user.email);
         return exsertingUser? checkMatchingPasswords(req,exsertingUser,next) : res.send('user email not found')
@@ -48,10 +50,11 @@ const checkMatchingPasswords = (req,obj,next) => {
 }
 // app.use(basicMiddleWare)
 
+app.use(protectiveMiddleware)
 app.use('/states',statesRouter)
 app.use('/airlines',airlinesRoute)
 app.use('/flights',flightsRouteMiddleWareByMethod,flightsRoute)
-app.use('/users',protectiveMiddleware,usersRoute)
+app.use('/users',usersRoute)
 
 app.get('/', (req,res)=>{ 
     res.send("server is working")

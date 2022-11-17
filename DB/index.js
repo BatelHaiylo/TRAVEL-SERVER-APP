@@ -1,0 +1,1 @@
+const DBConnection = process.env.CONNECTION_STRING
